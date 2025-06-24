@@ -168,11 +168,12 @@ function importFromJsonFile(event) {
   fileReader.readAsText(event.target.files[0]);
 }
 
-function syncQuotes() {
-  fetch("https://jsonplaceholder.typicode.com/posts")
-  .then((response) => response.json())
-  .then(data => {
-    const newQuotes = data.slice(0,5).map(post => ({
+async function syncQuotes() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await response.json();
+
+    const newQuotes = data.slice(0, 5).map(post => ({
       text: post.title,
       category: "Server"
     }));
@@ -180,18 +181,19 @@ function syncQuotes() {
     const beforeSync = quotes.length;
     quotes.push(...newQuotes);
     saveQuotes();
-    populateCategories;
+    populateCategories();
 
-    if(quotes.length > beforeSync) {
+    if (quotes.length > beforeSync) {
       console.log("Quotes synced from server!");
-      
     }
-  })
-  .catch(() => console.log("Failed to sync from server."))
+  } catch (error) {
+    console.error("Failed to sync from server:", error);
+  }
 }
 
+
 async function fetchQuotesFromServer() {
-  syncQuotes();
+  await syncQuotes();
 }
 
 addNewQuote.addEventListener("click", showRandomQuote);
@@ -206,5 +208,6 @@ window.onload = function () {
     displayQuote.innerHTML = `<p>"${q.text}"</p><small>Category: ${q.category}</small>`;
   }
 
-  setInterval(fetchQuotesFromServer, 20000);
+setInterval(fetchQuotesFromServer, 20000);
+
 };
