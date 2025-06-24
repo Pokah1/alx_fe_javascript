@@ -135,7 +135,7 @@ function importFromJsonFile(event) {
 }
 
 // OPTIONAL: Server sync simulation
-function simulateServerSync() {
+function fetchQuotesFromServer() {
   fetch("https://jsonplaceholder.typicode.com/posts")
     .then(response => response.json())
     .then(data => {
@@ -167,6 +167,6 @@ window.onload = function () {
     displayQuote.innerHTML = `<p>"${q.text}"</p><small>Category: ${q.category}</small>`;
   }
 
-  setInterval(simulateServerSync, 20000);
+  setInterval(fetchQuotesFromServer, 20000);
 };
 
