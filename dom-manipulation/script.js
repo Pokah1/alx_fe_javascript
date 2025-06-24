@@ -184,7 +184,14 @@ async function syncQuotes() {
     populateCategories();
 
     if (quotes.length > beforeSync) {
-      console.log("Quotes synced from server!");
+      const syncDiv = document.getElementById("syncNotification");
+      syncDiv.textContent = "Quotes synced with server!";
+      syncDiv.style.display = "block";
+
+       // Hide after 3 seconds
+      setTimeout(() => {
+        syncDiv.style.display = "none";
+      }, 3000);
     }
   } catch (error) {
     console.error("Failed to sync from server:", error);
